@@ -1,0 +1,10 @@
+{
+	"html": {
+		"attrs": {
+			"a": "b"
+		},
+		"p": {
+			"content": "somedata"
+		}
+	}
+}
