@@ -43,6 +43,11 @@ def separateHeirarchyFromLoad(jsonLoad, key):
     
 '''
 EEEEEEEHHHHHHHHHHHHHHHHHHH??????
+
+I mean, it SHOULD append in order, just have to make multiples of this logic such that 
+
+{'1': [2, 3], 2 : [3]} maybe, then infer that 1 > 2 > 3
+
 '''
 myList=[]
 myDict={}
