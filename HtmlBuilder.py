@@ -8,21 +8,44 @@ outputFile=open('output/test.json', 'w')
 '''
 Note that json brings back the string with ' instead of ", we have to make this conversion every time to walk along it
 '''
+
+def convertJsonLoadToString(jsonLoad):
+    jsonString = str(jsonLoad).replace("'", '"')
+    return jsonString
+
+def makeTag(jsonLoad):
+    attrsString=' '
+    tagString='<'
+    for key in jsonLoad.keys():
+        if key == 'attrs':
+            newJsonString=convertJsonLoadToString(jsonLoad["attrs"])
+            attrsLoad=json.loads(newJsonString)
+            for attr in attrsLoad.keys():
+                attrsString=attrsString + attr + '="' + attrsLoad[attr]+'"'
+        else:
+            tagString=tagString+key
+    return tagString+attrsString+'>'
+    
+    
 def buildHtml():
     jsonLoad=json.loads(jsonString)
     keys=Library.getIdsFromJsonString(jsonString)
     print(keys)
     
-    #check for attr, if not attr, set up a tag
+    #check for attrs, if not attrs, set up a tag
+    print(makeTag(jsonLoad["html"]))
     
+    '''
     print(jsonLoad["html"])
     outputFile.write("")
-    jsonString2 = str(jsonLoad["html"]).replace("'", '"')
+    jsonString2 = convertJsonLoadToString(jsonLoad["html"])
     jsonLoad=json.loads(jsonString2)
     print(jsonLoad["p"])
-    
+    '''
 
 buildHtml()
+
+
 '''
 #output file
 open('output/helloWorld.html', 'w')
