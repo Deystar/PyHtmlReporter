@@ -29,11 +29,24 @@ def makeTag(jsonLoad):
     
 def buildHtml():
     jsonLoad=json.loads(jsonString)
-    keys=Library.getIdsFromJsonString(jsonString)
-    print(keys)
+    finishedTags=[]
+    outOfTags=False
     
+    while not outOfTags:
+        for key in jsonLoad.keys():
+            if key != 'attrs':
+                print(makeTag(jsonLoad))
+                finishedTags.append(key)
+                jsonLoad=jsonLoad[key]
+                print(jsonLoad)
+        if not jsonLoad:
+            outOfTags=True
+    
+    for tag in finishedTags:
+        print("<"+tag+"/>")
+    
+    print(finishedTags)
     #check for attrs, if not attrs, set up a tag
-    print(makeTag(jsonLoad["html"]))
     
     '''
     print(jsonLoad["html"])
