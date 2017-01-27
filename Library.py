@@ -32,6 +32,6 @@ def getIdsFromJsonString(jsonString):
     return finalKeyList
 '''
 def getValueFromJson(jsonString):
-    myString=HtmlBuilder.jsonString
+    myString=JsonIdHeirarchyParser.jsonString
     json
 '''

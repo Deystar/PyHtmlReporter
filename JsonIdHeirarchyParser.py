@@ -1,5 +1,7 @@
 import json
 import Library
+from JsonIdHeirarchy import JsonIdHeirarchy
+from test.pickletester import MyList
 
 jsonString=open('json/test.json').read()
 outputFile=open('output/test.json', 'w')
@@ -13,6 +15,47 @@ def convertJsonLoadToString(jsonLoad):
     jsonString = str(jsonLoad).replace("'", '"')
     return jsonString
 
+def isLoadADictionary(jsonLoad):
+    return type(jsonLoad)==dict
+    
+def transformJsonIntoHeirarchy(jsonString):
+    primaryJsonLoad=json.loads(jsonString)
+    topHeirarchy=JsonIdHeirarchy("topHeirarchy", childJsonHeirarchies=[])
+    outOfTags=False
+    
+    for key in primaryJsonLoad.keys():
+        firstJsonObject=JsonIdHeirarchy(key, childJsonHeirarchies=[])
+        topHeirarchy.addToJsonHeirarchies(firstJsonObject)
+        jsonString=convertJsonLoadToString(primaryJsonLoad[key])
+        jsonLoad=json.loads(jsonString)
+        
+        #Could just set up a dict with the parent and child names, then afterwards, create the objects
+        #Dunno if objects are necessary with this logic
+        counter=0
+        #while 
+            
+            
+        
+    print(topHeirarchy.toString())
+    
+def separateHeirarchyFromLoad(jsonLoad, key):
+    newJsonObject=JsonIdHeirarchy(key, childJsonHeirarchies=[])
+    
+'''
+EEEEEEEHHHHHHHHHHHHHHHHHHH??????
+'''
+myList=[]
+myDict={}
+myDict["1"]=myList
+myList.append(1)
+myList.append(2)
+print(myDict)
+
+#transformJsonIntoHeirarchy(jsonString)
+#transformJsonIntoHeirarchy(jsonString)
+#print(isLoadADictionary(json.loads('{"armor":{"helmet":"hat","arms":"gauntlets"},"weapon":"sword"}')["armor"]))
+#print(isLoadADictionary(json.loads('{"helmet": "hat"}')["helmet"]))
+'''  
 def makeTag(jsonLoad):
     attrsString=' '
     tagString='<'
@@ -46,38 +89,4 @@ def buildHtml():
         print("<"+tag+"/>")
     
     print(finishedTags)
-    #check for attrs, if not attrs, set up a tag
-    
-    '''
-    print(jsonLoad["html"])
-    outputFile.write("")
-    jsonString2 = convertJsonLoadToString(jsonLoad["html"])
-    jsonLoad=json.loads(jsonString2)
-    print(jsonLoad["p"])
-    '''
-
-buildHtml()
-
-
-'''
-#output file
-open('output/helloWorld.html', 'w')
-
-jsonString=open('json/helloWorld.json').read()
-topLevelIdList=Library.getIdsFromJsonString(jsonString)
-jsonLoads=json.loads(jsonString)
-
-def buildHtml():
-    #read json for initial ids
-    parser = MyHtmlParser.HtmlIdParser()
-    file = open('html/helloWorld.html')
-    parser.feed(file.read())
-'''    
-'''
-#Parse all of the json information into a dictionary
-
-
-print(Library.getIdsFromJsonString(jsonString))
-
-
 '''

@@ -7,11 +7,13 @@ class Tag(object):
     tagName=''
     childTagList=[]
     attributes={}
+    content=''
         
-    def __init__(self, tagName, childTagList, attributes):
+    def __init__(self, tagName, childTagList, attributes, content):
         self.tagName=tagName
         self.childTagList= childTagList
         self.attributes= attributes
+        self.content= content
     
     def setTagName(self, tagName):
         self.tagName=tagName
@@ -47,28 +49,24 @@ class Tag(object):
         if (self.childTagList) and (not self.childTagList is None):
             for childTag in self.childTagList:
                 if type(childTag) is not None:
-                    childTagListString=childTagListString + childTag.toHtml()
+                    childTagListString=childTagListString + childTag.toXml()
         return childTagListString
+    
+    def setContent(self, content):
+        self.content= content
+        
+    def getContent(self):
+        if not self.content is None:
+            return self.content
+        else: 
+            return ''
             
-    def toHtml(self):
+    def toXml(self):
         attributesString= self.getAttributesString()
         childTagListString= self.getChildDataAsHtml()
-        return "<" + self.tagName + attributesString + ">" + childTagListString + "</" + self.tagName + ">"
+        return "<" + self.tagName + attributesString + ">" + self.getContent() + childTagListString + "</" + self.tagName + ">"
+    
 
-childTagList=[]
-childerTagList=[]
-attrDict= {}
-attrDict['id']='foo'
-attrDict['class']='bar'
-childerTag=Tag("p", None, None)
-childerTagList.append(childerTag)
-
-childTag=Tag("div", childerTagList, attrDict)
-childTagList.append(childTag)
-
-parentTag=Tag("html", childTagList, None)
-
-print(parentTag.toHtml())
 
     
     

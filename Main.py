@@ -1,6 +1,23 @@
-import HtmlBuilder
+import Tag
 
-HtmlBuilder.buildHtml()
+childTagList=[]
+childerTagList=[]
+attrDict= {}
+attrDict['id']='foo'
+attrDict['class']='bar'
+childerTag=Tag.Tag("p", None, None, "testContent")
+childerTagList.append(childerTag)
+
+childTag=Tag.Tag("div", childerTagList, attrDict, None)
+childTagList.append(childTag)
+
+parentTag=Tag.Tag("html", childTagList, None, None)
+
+print(parentTag.toXml())
+
+
+
+#JsonIdHeirarchyParser.buildHtml()
 
 
 

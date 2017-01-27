@@ -1,10 +1,7 @@
 {
-	"html": {
-		"attrs": {
-			"a": "b"
+	"armor": {
+		"helmet": "hat",
+		"arms" : "gauntlets"
 		},
-		"p": {
-			
-		}
-	}
+	"weapon": "sword"
 }
