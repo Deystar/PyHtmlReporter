@@ -6,6 +6,7 @@ Created on Jan 27, 2017
 class JsonIdHeirarchy(object):
     idAttr=''
     childJsonHeirarchies=[]
+    content=''
     
     def __init__(self, idAttr, childJsonHeirarchies):
         self.idAttr= idAttr
@@ -15,26 +16,58 @@ class JsonIdHeirarchy(object):
         self.idAttr=idAttr
     
     def getIdAttr(self):
-        return self.id
+        return self.idAttr
+    
+    def setContent(self, content):
+        self.content=content
+    
+    def getContent(self):
+        return self.content
     
     def setJsonHeirarchies(self, JsonHeirarchies):
         self.JsonHeirarchies=JsonHeirarchies
     
-    def addToJsonHeirarchies(self, newJsonHeirarchy):
+    def addToChildJsonHeirarchies(self, newJsonHeirarchy):
         self.childJsonHeirarchies.append(newJsonHeirarchy)
     
     def getJsonHeirarchies(self):
         return self.JsonHeirarchies()
     
-    def toString(self):
-        childJsonHeirarchiesString=''
-        childJsonHeirarchiesString=childJsonHeirarchiesString+"["
+    #Workaround for recursion issue
+    def getChildDataAsString(self):
+        childJsonHeirarchiesString = ''
         if not self.childJsonHeirarchies is None:
             for child in self.childJsonHeirarchies:
-                childJsonHeirarchiesString=childJsonHeirarchiesString + child.toString();
+                childJsonHeirarchiesString=childJsonHeirarchiesString +child.getIdAttr() + " "
+        return childJsonHeirarchiesString
+    
+    def toString(self):
+        print("called toString")
+        childJsonHeirarchiesString=''
+        childJsonHeirarchiesString=childJsonHeirarchiesString+"["
+        
+        childJsonHeirarchiesString=childJsonHeirarchiesString + self.getChildDataAsString()
         childJsonHeirarchiesString=childJsonHeirarchiesString+"] "
         return self.idAttr + " > " + childJsonHeirarchiesString
+    
+    
+    
+    '''
+    def getChildDataAsString(self):
+        print("called childData")
+        childJsonHeirarchiesString = ''
+        if not self.childJsonHeirarchies is None:
+            for child in self.childJsonHeirarchies:
+                print("child len:" +str(len(self.childJsonHeirarchies)))
+                print("child id: " +child.getIdAttr())
+                print("child type: " +str(type(child)))
+                
+                childJsonHeirarchiesString=childJsonHeirarchiesString +child.toString()
+                print("do i get here")
+        return childJsonHeirarchiesString
+    
 
+    '''
 '''
 bottom=JsonIdHeirarchy("bottomId", None)
 
@@ -46,6 +79,8 @@ mid=JsonIdHeirarchy("midId", midChildList)
 childList=[]
 childList.append(bottom)
 childList.append(mid)
-top=JsonIdHeirarchy("topId", childList)
+top=JsonIdHeirarchy("topId", [])
+top.addToChildJsonHeirarchies(bottom)
+top.addToChildJsonHeirarchies(mid)
 print(top.toString())
 '''
