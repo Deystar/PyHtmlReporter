@@ -20,7 +20,6 @@ def isLoadADictionary(jsonLoad):
 def transformJsonIntoHeirarchy(jsonString):
     primaryJsonLoad=json.loads(jsonString)
     topHeirarchy=JsonIdHeirarchy("topHeirarchy", childJsonHeirarchies=[])
-    outOfTags=False
     
     for key in primaryJsonLoad.keys():
         firstJsonObject=JsonIdHeirarchy(key, childJsonHeirarchies=[])
@@ -29,7 +28,7 @@ def transformJsonIntoHeirarchy(jsonString):
         print(isLoadADictionary(primaryJsonLoad[key]))
         if isLoadADictionary(primaryJsonLoad[key]):
             jsonLoad=json.loads(jsonString)
-        print(jsonLoad)
+            print(jsonLoad)
         #Could just set up a dict with the parent and child names, then afterwards, create the objects
         #Dunno if objects are necessary with this logic
         counter=0
@@ -76,6 +75,14 @@ def setHierarchiesInOrder(heirarchyDict):
     
 def separateHeirarchyFromLoad(jsonLoad, key):
     newJsonObject=JsonIdHeirarchy(key, childJsonHeirarchies=[])
+    outOfTags=False
+    fullHierarchyDictionary={}
+    while outOfTags==False:
+        for jsonLoad.keys():
+            
+        
+        
+    
     
     
 transformJsonIntoHeirarchy(jsonString)
