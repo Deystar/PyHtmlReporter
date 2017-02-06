@@ -1,123 +1,57 @@
 import json
-import Library
 from JsonIdHeirarchy import JsonIdHeirarchy
-from test.pickletester import MyList
 
-jsonString=open('json/test.json').read()
 outputFile=open('output/test.json', 'w')
 
 # messy, but w/e, this should be encapsulated somewhere else as some sort of util.  It will probably come in handy
 '''
 Note that json brings back the string with ' instead of ", we have to make this conversion every time to walk along it
 '''
-def convertJsonLoadToString(jsonLoad):
+def __convertJsonLoadToString(jsonLoad):
     jsonString = str(jsonLoad).replace("'", '"')
     return jsonString
 
-def isLoadADictionary(jsonLoad):
+def __isLoadADictionary(jsonLoad):
     return type(jsonLoad)==dict
     
 def transformJsonIntoHeirarchy(jsonString):
-    primaryJsonLoad=json.loads(jsonString)
-    topHeirarchy=JsonIdHeirarchy("topHeirarchy", childJsonHeirarchies=[])
-    
-    for key in primaryJsonLoad.keys():
-        firstJsonObject=JsonIdHeirarchy(key, childJsonHeirarchies=[])
-        topHeirarchy.addToChildJsonHeirarchies(firstJsonObject)
-        jsonString=convertJsonLoadToString(primaryJsonLoad[key])
-        print(isLoadADictionary(primaryJsonLoad[key]))
-        if isLoadADictionary(primaryJsonLoad[key]):
-            jsonLoad=json.loads(jsonString)
-            print(jsonLoad)
-        #Could just set up a dict with the parent and child names, then afterwards, create the objects
-        #Dunno if objects are necessary with this logic
-        counter=0
-        #while 
-            
-            
-        
-    print(topHeirarchy.toString())
+    jsonLoad=json.loads(jsonString)
+    return __separateHeirarchyFromLoad(jsonLoad, None)
     
 def getJsonHeirarchyFromListByName(jsonIdHeirarchyList, desiredName):
     for item in jsonIdHeirarchyList:
         if item.getIdAttr() == desiredName:
             return item
     return None
-
-def setHierarchiesInOrder(heirarchyDict):
-    hierarchyList=[]
-    for key in heirarchyDict.keys():
-        newHierarchy=JsonIdHeirarchy(key, [])
-        hierarchyList.append(newHierarchy)
-        
-    for key in heirarchyDict.keys():
-        parentHierarchy=getJsonHeirarchyFromListByName(hierarchyList, key)
-        
-        for value in heirarchyDict[key]:
-            thisHierarchy=getJsonHeirarchyFromListByName(hierarchyList, value)
-            print("value: " + value)
-            
-            if thisHierarchy:
-                print("this: " + thisHierarchy.toString())
-                parentHierarchy.addToChildJsonHeirarchies(thisHierarchy)
-                #not sure why toString is calling recursively here, not crucial to the code
-                '''
-                BUG
-                '''
-                print(parentHierarchy.toString())
-            else:
-                parentHierarchy.setContent(value)
-            
-        
-        for hierarchy in hierarchyList:
-            print(hierarchy.toString())
-            print("content " +hierarchy.getContent())
     
-def separateHeirarchyFromLoad(jsonLoad, key):
-    newJsonObject=JsonIdHeirarchy(key, childJsonHeirarchies=[])
-    outOfTags=False
-    fullHierarchyDictionary={}
-    while outOfTags==False:
-        for jsonLoad.keys():
-            
+def __separateHeirarchyFromLoad(jsonLoad, jsonObject):
+    if (jsonObject==None) :
+        jsonObject=JsonIdHeirarchy("firstHierarchy", childJsonHeirarchies=[])
+    for key in jsonLoad.keys():
+        thisJsonObject = JsonIdHeirarchy(key, childJsonHeirarchies=[])
         
-        
-    
-    
-    
-transformJsonIntoHeirarchy(jsonString)
-'''
-EEEEEEEHHHHHHHHHHHHHHHHHHH??????
-
-I mean, it SHOULD append in order, just have to make multiples of this logic such that 
-
-{'1': [2, 3], 2 : [3]} maybe, then infer that 1 > 2 > 3
+        if __isLoadADictionary(jsonLoad[key]):
+            jsonString = __convertJsonLoadToString(jsonLoad[key])
+            thisJsonLoad = json.loads(jsonString)
+            jsonObject.addToChildJsonHeirarchies(thisJsonObject)
+            __separateHeirarchyFromLoad(thisJsonLoad, thisJsonObject)
+        else:
+            thisJsonObject.setContent(jsonLoad[key])
+            jsonObject.addToChildJsonHeirarchies(thisJsonObject)
+    return jsonObject
 
 '''
-    
+jsonLoad=json.loads(jsonString)
+finalJsonLoad= __separateHeirarchyFromLoad(jsonLoad, None)
 
-
-'''
-bottom=JsonIdHeirarchy("bottomId", None)
-
-mid2=JsonIdHeirarchy("midId2", None)
-midChildList=[]
-midChildList.append(mid2)
-mid=JsonIdHeirarchy("midId", midChildList)
-
-childList=[]
-childList.append(bottom)
-childList.append(mid)
-top=JsonIdHeirarchy("topId", [])
-top.addToChildJsonHeirarchies(bottom)
-top.addToChildJsonHeirarchies(mid)
-print(top.toString())
+print("final: " + finalJsonLoad.toString())
+for child in finalJsonLoad.childJsonHeirarchies:
+    print(child.toString())
+    for child2 in child.childJsonHeirarchies:
+        print("child2 :" + child2.toString())
+        print("child2 content :" + child2.getContent())
 '''
 
-#transformJsonIntoHeirarchy(jsonString)
-#transformJsonIntoHeirarchy(jsonString)
-#print(isLoadADictionary(json.loads('{"armor":{"helmet":"hat","arms":"gauntlets"},"weapon":"sword"}')["armor"]))
-#print(isLoadADictionary(json.loads('{"helmet": "hat"}')["helmet"]))
 '''  
 def makeTag(jsonLoad):
     attrsString=' '

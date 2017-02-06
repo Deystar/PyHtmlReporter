@@ -42,7 +42,6 @@ class JsonIdHeirarchy(object):
         return childJsonHeirarchiesString
     
     def toString(self):
-        print("called toString")
         childJsonHeirarchiesString=''
         childJsonHeirarchiesString=childJsonHeirarchiesString+"["
         
