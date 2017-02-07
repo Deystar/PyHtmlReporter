@@ -1,6 +1,0 @@
-'''
-Created on Jan 25, 2017
-
-@author: cwitt
-'''
-import MyHtmlParser
