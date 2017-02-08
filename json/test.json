@@ -1,7 +1,14 @@
 {
 	"armor": {
 		"helmet": ["hat", "hat2"],
-		"arms" : "gauntlets"
-		},
-	"weapon": "sword"
+		"arms": "gauntlets"
+	},
+	"weapon": "sword",
+	"1": {
+		"2": {
+			"3": {
+				"4": "4"
+			}
+		}
+	}
 }

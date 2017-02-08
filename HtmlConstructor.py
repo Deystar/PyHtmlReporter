@@ -20,24 +20,30 @@ class HtmlConstructor():
     def getSoupFromId(self, desiredId):
         return self.soup.find(id=desiredId)
     
-    def __getHeirarchyContent(self, jsonHeirarchies):
+    def getHeirarchyContent(self, jsonHeirarchies=None, heirarchyPath=None):
         # If no heirarchy is specified, use the one set in the class
         if jsonHeirarchies is None:
             jsonHeirarchies=self.jsonHeirarchy
             
+        if heirarchyPath is None:
+                heirarchyPath=self.jsonHeirarchy.getIdAttr()
+        
         #check each of the children of the heirarchy
         for child in jsonHeirarchies.getChildJsonHeirarchies():
             
             #If there is no id by the child id, then skip the process
-            if not self.getSoupFromId(id=child.getIdAttr()) is None:
+            if not self.getSoupFromId(child.getIdAttr()) is None:
                 
                 #If the child has children, move further down
                 if len(child.getChildJsonHeirarchies()) > 0:
-                    self.getHeirarchyContent(child)
+                    thisHeirarchyPath= heirarchyPath + " > " + child.getIdAttr()
+                    self.getHeirarchyContent(child, thisHeirarchyPath)
                     
                 #If the child has no children, set the content
                 else:
                     print(child.getContent())
+                    finalPath=heirarchyPath + " > " + child.getIdAttr()
+                    print("path: " + finalPath)
     
     def isResultStr(self, result):
         return result is str
