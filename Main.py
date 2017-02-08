@@ -1,10 +1,9 @@
 from JsonIdHeirarchyParser import transformJsonIntoHeirarchy
 from HtmlConstructor import HtmlConstructor
 
-jsonString=open('json/test.json').read()
+jsonString=open('json/example1.json').read()
 heirarchyData=transformJsonIntoHeirarchy(jsonString)
-print(heirarchyData.toString())
 
-htmlString=open('html/helloWorld.html').read()
-constructor=HtmlConstructor(htmlString, heirarchyData)
-constructor.getHeirarchyContent()
+htmlString=open('html/example1.html').read()
+constructor=HtmlConstructor(htmlString, heirarchyData, 'output/example1.html')
+constructor.construct()

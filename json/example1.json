@@ -1,0 +1,14 @@
+{
+	"testMultiple": {
+		"test1": ["test1Content", "test2Content"],
+		"test2": "moreContent"
+	},
+	"testSingle": "singleContent",
+	"1": {
+		"2": {
+			"3": {
+				"4": "nestedContent"
+			}
+		}
+	}
+}

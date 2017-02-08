@@ -11,23 +11,26 @@ class HtmlConstructor():
     jsonHeirarchy=None
     htmlString=''
     soup=None
+    outputFile=None
     
-    def __init__(self, htmlString, jsonIdHeirarchy):
+    def __init__(self, htmlString, jsonIdHeirarchy, outputPath):
         self.jsonHeirarchy=jsonIdHeirarchy
         self.htmlString=htmlString
         self.soup=BeautifulSoup(self.htmlString, 'html.parser')
+        self.outputFile=open(outputPath, 'w')
     
     def getSoupFromId(self, desiredId):
         return self.soup.find(id=desiredId)
     
-    def getHeirarchyContent(self, jsonHeirarchies=None, heirarchyPath=None):
+    def construct(self, jsonHeirarchies=None, heirarchyPathList=[]):
+        self.getHeirarchyContent(jsonHeirarchies, heirarchyPathList)
+        self.outputFile.write(BeautifulSoup.prettify(self.soup))
+    
+    def getHeirarchyContent(self, jsonHeirarchies, heirarchyPathList):
         # If no heirarchy is specified, use the one set in the class
         if jsonHeirarchies is None:
             jsonHeirarchies=self.jsonHeirarchy
             
-        if heirarchyPath is None:
-                heirarchyPath=self.jsonHeirarchy.getIdAttr()
-        
         #check each of the children of the heirarchy
         for child in jsonHeirarchies.getChildJsonHeirarchies():
             
@@ -36,29 +39,41 @@ class HtmlConstructor():
                 
                 #If the child has children, move further down
                 if len(child.getChildJsonHeirarchies()) > 0:
-                    thisHeirarchyPath= heirarchyPath + " > " + child.getIdAttr()
-                    self.getHeirarchyContent(child, thisHeirarchyPath)
+                    heirarchyPathList.append(child.getIdAttr())
+                    self.getHeirarchyContent(child, heirarchyPathList)
                     
                 #If the child has no children, set the content
                 else:
-                    print(child.getContent())
-                    finalPath=heirarchyPath + " > " + child.getIdAttr()
-                    print("path: " + finalPath)
-    
+                    heirarchyPathList.append(child.getIdAttr())
+                    self.setContentInHtml(heirarchyPathList, child.getContent())
+                    
+                heirarchyPathList.remove(child.getIdAttr())
+        
     def isResultStr(self, result):
-        return result is str
+        return isinstance(result, str)
     
     def isResultList(self, result):
-        return result is list
-
-'''
-jsonString=open('html/helloWorld.html').read()
-soup=BeautifulSoup(jsonString,'html.parser')
-
-result=soup.find(id="armor")
-
-result2=result.find(id="helmet")
-result2.string="hat"
-
-print(soup.prettify())
-'''
+        return isinstance(result, list)
+    
+    def setContentInHtml(self, heirarchyPathList, content, thisSoup=None):
+        if thisSoup is None:
+            thisSoup=self.soup
+        for thisId in heirarchyPathList:
+            thisSoup=thisSoup.find(id=thisId)
+        
+        if self.isResultStr(content):
+            thisSoup.string=content
+            
+        if self.isResultList(content):
+            self.handleListContent(thisSoup, content)
+                
+    def handleListContent(self, soup, content):
+        contentString=''
+        olTag=self.soup.new_tag('ol')
+        soup.insert(0,olTag)
+        for item in content:
+            newTag=self.soup.new_tag('li')
+            olTag.insert(1,newTag)
+            contentString=''
+            contentString=contentString + item
+            newTag.string=contentString
