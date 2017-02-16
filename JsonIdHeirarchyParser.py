@@ -1,8 +1,6 @@
 import json
 from JsonIdHeirarchy import JsonIdHeirarchy
 
-outputFile=open('output/test.json', 'w')
-
 # messy, but w/e, this should be encapsulated somewhere else as some sort of util.  It will probably come in handy
 '''
 Note that json brings back the string with ' instead of ", we have to make this conversion every time to walk along it

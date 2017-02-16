@@ -48,20 +48,3 @@ class JsonIdHeirarchy(object):
         childJsonHeirarchiesString=childJsonHeirarchiesString + self.getChildDataAsString()
         childJsonHeirarchiesString=childJsonHeirarchiesString+"] "
         return self.idAttr + " > " + childJsonHeirarchiesString
-    
-    
-'''    
-bottom=JsonIdHeirarchy("bottomId", [])
-
-mid2=JsonIdHeirarchy("midId2", [])
-midChildList=[]
-midChildList.append(mid2)
-mid=JsonIdHeirarchy("midId", midChildList)
-
-childList=[]
-childList.append(bottom)
-childList.append(mid)
-top=JsonIdHeirarchy("topId", childList)
-
-print(top.toString())
-'''

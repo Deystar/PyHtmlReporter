@@ -19,12 +19,15 @@ class HtmlConstructor():
         self.soup=BeautifulSoup(self.htmlString, 'html.parser')
         self.outputFile=open(outputPath, 'w')
     
+    #Finds the part of the soup object that deals with the desired tag
     def getSoupFromId(self, desiredId):
         return self.soup.find(id=desiredId)
     
+    #Sets the data in the html and writes it to the new file
     def construct(self, jsonHeirarchies=None, heirarchyPathList=[]):
         self.getHeirarchyContent(jsonHeirarchies, heirarchyPathList)
         self.outputFile.write(BeautifulSoup.prettify(self.soup))
+    
     
     def getHeirarchyContent(self, jsonHeirarchies, heirarchyPathList):
         # If no heirarchy is specified, use the one set in the class
